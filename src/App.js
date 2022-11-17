@@ -10,6 +10,8 @@ const lngDetector = new LanguageDetect();
 
 
 function App() {
+
+  console.log(lngDetector.detect("this is a test"))
   setTimeout(() => { 
     const selected = document.querySelector(".selected");
     const optionsContainer = document.querySelector(".options-container");
