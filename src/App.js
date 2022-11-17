@@ -105,13 +105,14 @@ function App() {
     
     
       switchButton.addEventListener("click", () => {
-        langHolder = selected.innerHTML;
-        selected.innerHTML = selected2.innerHTML;
-        selected2.innerHTML = langHolder;
-        textHolder = beforeText.value;
-        beforeText.value = afterText.value;
-        afterText.value = textHolder;
-    
+        if(selected.innerHTML !== 'Detect Language'){
+          langHolder = selected.innerHTML;
+          selected.innerHTML = selected2.innerHTML;
+          selected2.innerHTML = langHolder;
+          textHolder = beforeText.value;
+          beforeText.value = afterText.value;
+          afterText.value = textHolder;
+        }
       });
       
     btn.addEventListener('click',() =>{
