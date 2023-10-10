@@ -167,7 +167,7 @@ function App() {
         <textarea className="beforeArea" placeholder="Please enter some text."></textarea>
         <textarea className="afterArea" placeholder="Translation."></textarea>
         <button className="translateButton">Translate</button>
-        <div className="footer"> Abit Jestine, Daniel Jaglen, Matthew Richard, Odejobi Emmanuel, Ziad Essam Ziyada <br /> - 2022 - </div>
+        <div className="footer"> Abit Jestine, Hunny Jaglen, Matthew Richard, Odejobi Emmanuel, Ziad Essam Ziyada <br /> - 2022 - </div>
       </section>
     </div>
 
