@@ -37,13 +37,24 @@ export default function LangOutput({ selectedLang, setSelectedLang }) {
   return (
     <div className="langSelect2">
       <div className={`options-container2 ${isOpen ? 'active' : ''}`}>
-        {filteredLanguages.map((lang, index,key) => (
-          <div className="option2" key={key+index} ref={el => optionsRef.current[index] = el}>
-            <input type="radio" className="radio" id={`translated-${index}`} name="translatedLang" />
-            <label htmlFor={`translated-${index}`} onClick={() => {
-              setSelectedLang(lang.name);
-              setIsOpen(false);
-            }}>
+        {filteredLanguages.map((lang, index) => (
+          <div
+            className="option2"
+            key={`${lang.language}-${index}`}
+            ref={el => optionsRef.current[index] = el}
+          >
+            <input
+              type="radio"
+              className="radio"
+              id={`translated-${index}`}
+              name="translatedLang"
+              checked={selectedLang === lang.name}
+              onChange={() => {
+                setSelectedLang(lang.name);
+                setIsOpen(false);
+              }}
+            />
+            <label htmlFor={`translated-${index}`}>
               {lang.name}
             </label>
           </div>

@@ -49,7 +49,7 @@ function Home() {
   };
 
   const handleSwitch = () => {
-    if(lang2 != "Please Select a Language..."){
+    if(lang2 != "Please Select a Language..." && lang1 != "Detect Language"){
     const tempLang = lang1;
     setLang1(lang2);
     setLang2(tempLang);
