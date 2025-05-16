@@ -1,95 +1,92 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+'use client'
 
-export default function Home() {
+import './App.css';
+import { useState, useEffect } from 'react';
+import Nav from './components/Nav';
+import LangSelector from './components/LangSelector';
+import SwitchButton from './components/SwtichButton';
+import LangOutput from './components/LangOutput';
+
+function Home() {
+  const [beforeText, setBeforeText] = useState('');
+  const [afterText, setAfterText] = useState('');
+  const [lang1, setLang1] = useState('Detect Language');
+  const [lang2, setLang2] = useState('Please Select a Language...');
+  const [langMap, setLangMap] = useState({});
+
+  useEffect(() => {
+    async function fetchLangs() {
+      const res = await fetch('/api/languages');
+      const data = await res.json();
+      const map = {};
+      data.forEach(lang => {
+        map[lang.name] = lang.language;
+      });
+      setLangMap(map);
+    }
+    fetchLangs();
+  }, []);
+
+  async function translateString(str, LanguageFrom, translateTo) {
+    const res = await fetch('/api/translate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ str, translateTo }),
+    });
+    const data = await res.json();
+    console.log(data);
+    return data.translation;
+  }
+
+  const handleTranslate = async () => {
+    if (lang2 === 'Please Select a Language...') {
+      alert("Please select the language that you would like to translate to.");
+      return;
+    }
+    const langCode = langMap[lang2] || lang2;
+    const translated = await translateString(beforeText, lang1, langCode);
+    setAfterText(translated);
+  };
+
+  const handleSwitch = () => {
+    if(lang2 != "Please Select a Language..."){
+    const tempLang = lang1;
+    setLang1(lang2);
+    setLang2(tempLang);
+
+    const tempText = beforeText;
+    setBeforeText(afterText);
+    setAfterText(tempText);
+    }
+
+  };
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
+    <div className="App">
+      <section className='container'>
+        <Nav />
+        <LangSelector selectedLang={lang1} setSelectedLang={setLang1} />
+        <SwitchButton onClick={handleSwitch} />
+        <LangOutput selectedLang={lang2} setSelectedLang={setLang2} />
+        <textarea
+          className="beforeArea"
+          placeholder="Please enter some text."
+          value={beforeText}
+          onChange={(e) => setBeforeText(e.target.value)}
         />
-        <ol>
-          <li>
-            Get started by editing <code>app/page.js</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
+        <textarea
+          className="afterArea"
+          placeholder="Translation."
+          value={afterText}
+          readOnly
+        />
+        <button className="translateButton" onClick={handleTranslate}>Translate</button>
+        <div className="footer">
+          Abit Jestine, Hunny Jaglen, Matthew Richard, Odejobi Emmanuel, Ziad Essam Ziyada <br /> - 2022 -
         </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </section>
     </div>
   );
 }
+
+export default Home;
